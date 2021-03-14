@@ -1,13 +1,37 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import Chart from 'react-apexcharts';
 
 const ChartHome = () => {
+  const [covidData, setCovidData] = useState(null);
+
+  useEffect(() => {
+    async function fetchAPI() {
+      let response = await axios.get(
+        'https://api.covid19tracking.narrativa.com/api/country/spain?date_from=2020-03-20&date_to=2020-03-22'
+      );
+      setCovidData(response.data);
+    }
+    fetchAPI();
+  }, []);
+
+  let getDates = [];
+  let getData = [];
+
+  for (const [key, value] of Object.entries(covidData.dates)) {
+    console.log(`${key}: ${value}`);
+    getDates.push(key);
+  }
+
+  console.log(covidData.dates);
+
   const data = {
     options: {
       chart: {
         id: 'apexchart-example',
       },
       xaxis: {
-        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+        categories: getDates,
       },
     },
     series: [
