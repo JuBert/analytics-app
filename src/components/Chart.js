@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Chart from 'react-apexcharts';
+import { DatePicker } from 'antd';
+import 'antd/dist/antd.css';
 
 const ChartHome = () => {
   const [covidData, setCovidData] = useState(null);
@@ -15,20 +17,24 @@ const ChartHome = () => {
     fetchAPI();
   }, []);
 
+  //   console.log(covidData);
+
   let getDates = [];
   let getData = [];
 
-  for (const [key, value] of Object.entries(covidData.dates)) {
-    console.log(`${key}: ${value}`);
-    getDates.push(key);
+  if (covidData) {
+    for (const [key, value] of Object.entries(covidData.dates)) {
+      //   console.log(`${key}: ${value}`);
+      //   console.log(value.countries.Spain.today_new_recovered);
+      getDates.push(key);
+      getData.push(value.countries.Spain.today_new_recovered);
+    }
   }
-
-  console.log(covidData.dates);
 
   const data = {
     options: {
       chart: {
-        id: 'apexchart-example',
+        id: 'apexchart-covidData',
       },
       xaxis: {
         categories: getDates,
@@ -37,18 +43,21 @@ const ChartHome = () => {
     series: [
       {
         name: 'series-1',
-        data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
+        data: getData,
       },
     ],
   };
   return (
-    <Chart
-      options={data.options}
-      series={data.series}
-      type="bar"
-      width={500}
-      height={320}
-    />
+    <>
+      <DatePicker />
+      <Chart
+        options={data.options}
+        series={data.series}
+        type="bar"
+        width={500}
+        height={320}
+      />
+    </>
   );
 };
 
