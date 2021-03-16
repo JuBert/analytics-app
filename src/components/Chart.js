@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Chart from 'react-apexcharts';
 import { DatePicker } from 'antd';
+import { Radio } from 'antd';
 import 'antd/dist/antd.css';
 
 const { RangePicker } = DatePicker;
@@ -10,13 +11,10 @@ const dateFormat = 'YYYY-MM-DD';
 const ChartHome = () => {
   const [covidData, setCovidData] = useState(null);
   const [dateRange, setDateRange] = useState(['2021-01-01', '2021-02-28']);
+  const [dataSeries, setDataSeries] = useState('confirmed');
 
-  const handleChange = (date, dateString) => {
-    setDateRange(dateString);
-  };
-
-  //   console.log('State Start ' + dateRange[0]);
-  //   console.log('State End ' + dateRange[1]);
+  let getDates = [];
+  let getData = [];
 
   useEffect(() => {
     async function fetchAPI() {
@@ -28,17 +26,30 @@ const ChartHome = () => {
     fetchAPI();
   }, [dateRange]);
 
-  let getDates = [];
-  let getData = [];
-
-  if (covidData) {
+  if (covidData && dataSeries == 'confirmed') {
     for (const [key, value] of Object.entries(covidData.dates)) {
-      //   console.log(`${key}: ${value}`);
-      //   console.log(value.countries.Spain.today_new_confirmed);
       getDates.push(key);
       getData.push(value.countries.Spain.today_new_confirmed);
     }
+  } else if (covidData && dataSeries == 'deaths') {
+    for (const [key, value] of Object.entries(covidData.dates)) {
+      getDates.push(key);
+      getData.push(value.countries.Spain.today_new_deaths);
+    }
+  } else if (covidData && dataSeries == 'open_cases') {
+    for (const [key, value] of Object.entries(covidData.dates)) {
+      getDates.push(key);
+      getData.push(value.countries.Spain.today_new_open_cases);
+    }
   }
+
+  const handleDateChange = (date, dateString) => {
+    setDateRange(dateString);
+  };
+
+  const handleDataSeriesChange = (e) => {
+    setDataSeries(e.target.value);
+  };
 
   const data = {
     options: {
@@ -47,6 +58,9 @@ const ChartHome = () => {
       },
       xaxis: {
         categories: getDates,
+      },
+      dataLabels: {
+        enabled: false,
       },
     },
     series: [
@@ -58,7 +72,12 @@ const ChartHome = () => {
   };
   return (
     <>
-      <RangePicker format={dateFormat} onChange={handleChange} />
+      <RangePicker
+        format={dateFormat}
+        bordered={false}
+        onChange={handleDateChange}
+        // defaultPickerValue={}
+      />
       <Chart
         options={data.options}
         series={data.series}
@@ -66,6 +85,20 @@ const ChartHome = () => {
         width={500}
         height={320}
       />
+      <div
+        style={{
+          width: '400px',
+          display: 'flex',
+          justifyContent: 'space-around',
+          flexDirection: 'row',
+        }}
+      >
+        <Radio.Group value={dataSeries} onChange={handleDataSeriesChange}>
+          <Radio.Button value="open_cases">Open cases</Radio.Button>
+          <Radio.Button value="confirmed">New cases</Radio.Button>
+          <Radio.Button value="deaths">Deaths</Radio.Button>
+        </Radio.Group>
+      </div>
     </>
   );
 };
