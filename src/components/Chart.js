@@ -36,10 +36,10 @@ const ChartHome = () => {
       getDates.push(key);
       getData.push(value.countries.Spain.today_new_deaths);
     }
-  } else if (covidData && dataSeries === 'open_cases') {
+  } else if (covidData && dataSeries === 'recovered') {
     for (const [key, value] of Object.entries(covidData.dates)) {
       getDates.push(key);
-      getData.push(value.countries.Spain.today_new_open_cases);
+      getData.push(value.countries.Spain.today_new_recovered);
     }
   }
 
@@ -72,11 +72,12 @@ const ChartHome = () => {
   };
   return (
     <>
+      <h1>Covid Tracker</h1>
       <RangePicker
         format={dateFormat}
         bordered={false}
         onChange={handleDateChange}
-        // defaultPickerValue={}
+        // value={[dateRange[0], dateRange[1]]}
       />
       <Chart
         options={data.options}
@@ -93,11 +94,10 @@ const ChartHome = () => {
           flexDirection: 'row',
         }}
       >
-        <h1>Covid data</h1>
         <Radio.Group value={dataSeries} onChange={handleDataSeriesChange}>
-          <Radio.Button value="open_cases">Open cases</Radio.Button>
           <Radio.Button value="confirmed">New cases</Radio.Button>
           <Radio.Button value="deaths">Deaths</Radio.Button>
+          <Radio.Button value="recovered">Recovered</Radio.Button>
         </Radio.Group>
       </div>
     </>
