@@ -26,17 +26,17 @@ const ChartHome = () => {
     fetchAPI();
   }, [dateRange]);
 
-  if (covidData && dataSeries == 'confirmed') {
+  if (covidData && dataSeries === 'confirmed') {
     for (const [key, value] of Object.entries(covidData.dates)) {
       getDates.push(key);
       getData.push(value.countries.Spain.today_new_confirmed);
     }
-  } else if (covidData && dataSeries == 'deaths') {
+  } else if (covidData && dataSeries === 'deaths') {
     for (const [key, value] of Object.entries(covidData.dates)) {
       getDates.push(key);
       getData.push(value.countries.Spain.today_new_deaths);
     }
-  } else if (covidData && dataSeries == 'open_cases') {
+  } else if (covidData && dataSeries === 'open_cases') {
     for (const [key, value] of Object.entries(covidData.dates)) {
       getDates.push(key);
       getData.push(value.countries.Spain.today_new_open_cases);
@@ -93,6 +93,7 @@ const ChartHome = () => {
           flexDirection: 'row',
         }}
       >
+        <h1>Covid data</h1>
         <Radio.Group value={dataSeries} onChange={handleDataSeriesChange}>
           <Radio.Button value="open_cases">Open cases</Radio.Button>
           <Radio.Button value="confirmed">New cases</Radio.Button>
