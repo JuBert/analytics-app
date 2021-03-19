@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Chart from 'react-apexcharts';
-import { Radio } from 'antd';
 //Components
 import DateSelector from './RangePicker';
+import RadioButtons from './RadioButtons';
 
 const ChartHome = () => {
   const [covidData, setCovidData] = useState(null);
@@ -69,7 +69,9 @@ const ChartHome = () => {
   };
   return (
     <>
-      <h1>Covid Tracker</h1>
+      <div className="chart-title">
+        <h1>Covid Tracker</h1>
+      </div>
       <DateSelector onChange={handleDateChange} />
       <Chart
         options={data.options}
@@ -78,20 +80,7 @@ const ChartHome = () => {
         width={500}
         height={320}
       />
-      <div
-        style={{
-          width: '400px',
-          display: 'flex',
-          justifyContent: 'space-around',
-          flexDirection: 'row',
-        }}
-      >
-        <Radio.Group value={dataSeries} onChange={handleDataSeriesChange}>
-          <Radio.Button value="confirmed">New cases</Radio.Button>
-          <Radio.Button value="deaths">Deaths</Radio.Button>
-          <Radio.Button value="recovered">Recovered</Radio.Button>
-        </Radio.Group>
-      </div>
+      <RadioButtons value={dataSeries} onChange={handleDataSeriesChange} />
     </>
   );
 };

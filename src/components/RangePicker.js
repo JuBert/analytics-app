@@ -6,7 +6,7 @@ const dateFormat = 'YYYY-MM-DD';
 
 const DateSelector = ({ onChange }) => {
   return (
-    <div>
+    <div className="rangepicker">
       <RangePicker format={dateFormat} bordered={false} onChange={onChange} />
     </div>
   );
