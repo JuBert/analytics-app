@@ -1,12 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Chart from 'react-apexcharts';
-import { DatePicker } from 'antd';
 import { Radio } from 'antd';
-import 'antd/dist/antd.css';
-
-const { RangePicker } = DatePicker;
-const dateFormat = 'YYYY-MM-DD';
+//Components
+import DateSelector from './RangePicker';
 
 const ChartHome = () => {
   const [covidData, setCovidData] = useState(null);
@@ -73,12 +70,7 @@ const ChartHome = () => {
   return (
     <>
       <h1>Covid Tracker</h1>
-      <RangePicker
-        format={dateFormat}
-        bordered={false}
-        onChange={handleDateChange}
-        // value={[dateRange[0], dateRange[1]]}
-      />
+      <DateSelector onChange={handleDateChange} />
       <Chart
         options={data.options}
         series={data.series}
